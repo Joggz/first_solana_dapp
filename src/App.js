@@ -83,10 +83,33 @@ const App = () => {
       );
 
       console.log("Got the account", account);
-      setGifList(account.gifList);
+      setGifList(account.gifsList);
     } catch (error) {
       console.log("Error in getGifList: ", error);
       setGifList(null);
+    }
+  };
+
+  const createGifAccount = async () => {
+    try {
+      const provider = getProvider();
+      const program = new Program(idl, programID, provider);
+      console.log("ping");
+      await program.rpc.initialize({
+        accounts: {
+          baseAccount: baseAccount.publicKey,
+          user: provider.wallet.publicKey,
+          systemProgram: SystemProgram.programId,
+        },
+        signers: [baseAccount],
+      });
+      console.log(
+        "Created a new BaseAccount w/ address:",
+        baseAccount.publicKey.toString()
+      );
+      await getGifList();
+    } catch (error) {
+      console.log("Error creating BaseAccount account:", error);
     }
   };
 
@@ -118,11 +141,22 @@ const App = () => {
         </button>
       </form>
       <div className="gif-grid">
-        {gifList.map((gif) => (
-          <div className="gif-item" key={gif}>
-            <img src={gif} alt={gif} />
+        {gifList === null ? (
+          <div className="connected-container">
+            <button
+              className="cta-button submit-gif-button"
+              onClick={createGifAccount}
+            >
+              Do One-Time Initialization For GIF Program Account
+            </button>
           </div>
-        ))}
+        ) : (
+          gifList.map((gif) => (
+            <div className="gif-item" key={gif}>
+              <img src={gif} alt={gif} />
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
