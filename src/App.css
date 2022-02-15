@@ -1,16 +1,17 @@
 .App {
-  height: 100vh;
+  /* height: 100vh; */
   background-color: #1a202c;
   overflow: scroll;
   text-align: center;
 }
 
 .container {
-  height: 100%;
+  /* height: 100vh; */
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 30px 0 30px;
+  padding: 3rem 30px 0 30px;
+  overflow-y: scroll;
 }
 
 .authed-container {
@@ -110,11 +111,15 @@
   border-radius: 10px;
   object-fit: cover;
 }
+.connected-container {
+  height: max-content;
+}
 
-.connected-container input[type='text'] {
+.connected-container input[type="text"] {
   display: inline-block;
   color: white;
   padding: 10px;
+  margin: 4rem;
   width: 50%;
   height: 60px;
   font-size: 16px;
@@ -127,4 +132,9 @@
 
 .connected-container button {
   height: 50px;
+}
+
+.connected-container .userAddress {
+  color: white;
+  padding: 1rem;
 }
