@@ -1,5 +1,5 @@
 .App {
-  /* height: 100vh; */
+  min-height: 100vh;
   background-color: #1a202c;
   overflow: scroll;
   text-align: center;
@@ -64,6 +64,7 @@
   background-size: 200% 200%;
   animation: gradient-animation 4s ease infinite;
   margin-left: 10px;
+  cursor: pointer;
 }
 
 .footer-container {
@@ -132,6 +133,7 @@
 
 .connected-container button {
   height: 50px;
+  cursor: pointer;
 }
 
 .connected-container .userAddress {

@@ -44,14 +44,20 @@ const App = () => {
   const [walletAddress, setWalletAddress] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [gifList, setGifList] = useState([]);
+  const [loading, isLoading] = useState(false);
 
   const connectWallet = async () => {
+    isLoading(!loading);
     const { solana } = window;
 
     if (solana) {
       const response = await solana.connect();
       console.log("Connected with Public Key:", response.publicKey.toString());
       setWalletAddress(response.publicKey.toString());
+      isLoading(false);
+    } else {
+      isLoading(false);
+      alert("add solana wallet to browser, Thank You!!");
     }
   };
 
@@ -64,7 +70,13 @@ const App = () => {
       className="cta-button connect-wallet-button"
       onClick={connectWallet}
     >
-      Connect to Wallet
+      {!loading ? (
+        "Connect to Wallet"
+      ) : (
+        <div class="fa-3x">
+          <i class="fas fa-stroopwafel fa-spin"></i>
+        </div>
+      )}
     </button>
   );
   const onInputChange = (event) => {
@@ -98,6 +110,7 @@ const App = () => {
   };
 
   const createGifAccount = async () => {
+    isLoading(true);
     try {
       const provider = getProvider();
       const program = new Program(idl, programID, provider);
@@ -115,12 +128,15 @@ const App = () => {
         baseAccount.publicKey.toString()
       );
       await getGifList();
+      isLoading(false);
     } catch (error) {
       console.log("Error creating BaseAccount account:", error);
+      isLoading(false);
     }
   };
 
   const sendGif = async () => {
+    isLoading(true);
     if (inputValue.length === 0) {
       // console.log("No gif link given!")
       return;
@@ -140,11 +156,12 @@ const App = () => {
       // console.log("GIF successfully sent to program", inputValue);
 
       await getGifList();
+      isLoading(false);
     } catch (error) {
       console.log("Error sending GIF:", error);
+      isLoading(false);
     }
   };
-  console.log(gifList);
 
   const renderConnectedContainer = () => {
     // If we hit this, it means the program account hasn't been initialized.
@@ -177,7 +194,13 @@ const App = () => {
               onChange={onInputChange}
             />
             <button type="submit" className="cta-button submit-gif-button">
-              Submit
+              {!loading ? (
+                " Submit"
+              ) : (
+                <div class="fa-3x">
+                  <i class="fas fa-stroopwafel fa-spin">submitting</i>
+                </div>
+              )}
             </button>
           </form>
           <div className="gif-grid">
@@ -260,7 +283,7 @@ const App = () => {
             href={TWITTER_LINK}
             target="_blank"
             rel="noreferrer"
-          >{`built on @${TWITTER_HANDLE}`}</a>
+          >{`built by  @${TWITTER_HANDLE}`}</a>
         </div>
       </div>
     </div>
